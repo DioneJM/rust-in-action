@@ -21,7 +21,6 @@ unsafe impl GlobalAlloc for ReportingAllocator {
         let time_taken = end - start;
         let bytes_requested = layout.size();
 
-        eprintln!("{}\t{}", bytes_requested, time_taken.as_nanos());
         ptr
     }
 
@@ -132,7 +131,7 @@ impl World {
     }
 }
 fn main() {
-    let (width, height) = (1280.0, 960.0);
+    let (width, height) = (350.0, 350.0);
     let mut window: PistonWindow = WindowSettings::new("particles", [width, height])
         .exit_on_esc(true)
         .build()
