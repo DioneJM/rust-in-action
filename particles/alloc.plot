@@ -14,6 +14,6 @@ set yrange [10 to 10000]
 set ytics nomirror out
 
 plot "alloc.tsv" with points \
-    pointtype 6 \
+    pointtype 5 \
     pointsize 1.25 \
     linecolor rgbcolor "#22dd3131”
