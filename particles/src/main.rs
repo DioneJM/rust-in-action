@@ -21,7 +21,8 @@ unsafe impl GlobalAlloc for ReportingAllocator {
         let time_taken = end - start;
         let bytes_requested = layout.size();
 
-        eprintln!(format!("{}\t{}ns", bytes_requested, time_taken.as_nanos()));
+
+        eprintln!("{}\t{}ns", bytes_requested, time_taken.as_nanos());
 
         ptr
     }
