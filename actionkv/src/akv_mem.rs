@@ -22,26 +22,26 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let file_name = args.get(1).expect(&USAGE);
     let action = args.get(2).expect(&USAGE).as_ref();
-    let key = args.get(3).expect(&USAGE).as_ref();
+    let key = args.get(3).expect(&USAGE);
     let value = args.get(4);
 
     let path = std::path::Path::new(&file_name);
     let mut store = ActionKV::open(path).expect("Unable to open file");
-    store.load.expect("Unable to load data from store");
+    store.load().expect("Unable to load data from store");
 
     match action {
-        "get" => match store.get(key).unwrap {
+        "get" => match store.get(key) {
             None => eprintln!("{:?} not found", key),
             Some(value) => println!("{:?}", value)
         },
         "delete" => store.delete(key).unwrap(),
         "insert" => {
-            let value = value.expect(&USAGE).as_ref();
-            store.insert(key, value).unwrap()
+            let value = value.expect(&USAGE);
+            store.insert(key, value).unwrap();
         },
         "update" => {
-            let value = value.expect(&USAGE).as_ref();
-            store.update(key, value).unwrap()
+            let value = value.expect(&USAGE);
+            store.update(key, value).unwrap();
         },
         _ => eprintln!("{}", &USAGE),
     }
