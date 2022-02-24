@@ -22,7 +22,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let file_name = args.get(1).expect(&USAGE);
     let action = args.get(2).expect(&USAGE).as_ref();
-    let key = args.get(3).expect(&USAGE);
+    let key = args.get(3).expect(&USAGE).as_bytes();
     let value = args.get(4);
 
     let path = std::path::Path::new(&file_name);
@@ -30,17 +30,17 @@ fn main() {
     store.load().expect("Unable to load data from store");
 
     match action {
-        "get" => match store.get(key.as_bytes()).expect("Failed to get") {
+        "get" => match store.get(key).expect("Failed to get") {
             None => eprintln!("{:?} not found", key),
-            Some(value) => println!("{:?}", value)
+            Some(value) => println!("{}", String::from_utf8_lossy(value.as_slice()))
         },
         "delete" => store.delete(key).unwrap(),
         "insert" => {
             let value = value.expect(&USAGE).as_bytes();
-            store.insert(key.as_bytes(), value).unwrap();
+            store.insert(key, value).unwrap();
         },
         "update" => {
-            let value = value.expect(&USAGE);
+            let value = value.expect(&USAGE).as_bytes();
             store.update(key, value).unwrap();
         },
         _ => eprintln!("{}", &USAGE),

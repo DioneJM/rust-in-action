@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::fmt::Error;
 use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Write};
@@ -9,8 +8,8 @@ use crc::crc32;
 use serde_derive::{Deserialize, Serialize};
 
 // ByteStr is to &str what ByteString is to Vec<u8>
-type ByteString = Vec<u8>;
-type ByteStr = [u8];
+pub type ByteString = Vec<u8>;
+pub type ByteStr = [u8];
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct KeyValuePair {
@@ -134,8 +133,9 @@ impl ActionKV {
         Ok(found)
     }
 
-    pub fn delete(&self, _key: &String) -> Result<(), Error> {
-        todo!()
+    #[inline]
+    pub fn delete(&mut self, key: &ByteStr) -> io::Result<()> {
+        self.insert(key, b"")
     }
     pub fn insert(&mut self, key: &ByteStr, value: &ByteStr) -> io::Result<()> {
         let position = self.insert_but_ignore_index(key, value)?;
@@ -172,8 +172,8 @@ impl ActionKV {
         Ok(current_position)
     }
 
-    pub fn update(&self, _key: &String, _value: &String) -> Result<String, Error> {
-        todo!()
+    pub fn update(&mut self, key: &ByteStr, value: &ByteStr) -> io::Result<()> {
+        self.insert(key, value)
     }
 }
 
