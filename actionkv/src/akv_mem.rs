@@ -30,14 +30,14 @@ fn main() {
     store.load().expect("Unable to load data from store");
 
     match action {
-        "get" => match store.get(key) {
+        "get" => match store.get(key.as_bytes()).expect("Failed to get") {
             None => eprintln!("{:?} not found", key),
             Some(value) => println!("{:?}", value)
         },
         "delete" => store.delete(key).unwrap(),
         "insert" => {
-            let value = value.expect(&USAGE);
-            store.insert(key, value).unwrap();
+            let value = value.expect(&USAGE).as_bytes();
+            store.insert(key.as_bytes(), value).unwrap();
         },
         "update" => {
             let value = value.expect(&USAGE);
