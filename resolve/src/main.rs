@@ -42,12 +42,21 @@ fn main() {
     let _amt = localhost.send_to(&request_as_bytes, dns_server)
         .expect("socket misconfigured");
 
-    let (_amt, _remote) = localhost
-        .recv_from(&mut request_as_bytes)
-        .expect("timeout reached");
+    loop {
+        let (_amt, remote_port) = localhost
+            .recv_from(&mut request_as_bytes)
+            .expect("timeout reached");
+
+        if remote_port == dns_server {
+            println!("breaking: {:?}", remote_port);
+            break;
+        }
+    }
 
     let dns_message = Message::from_vec(&response_as_bytes)
         .expect("Failed to parse response");
+
+    println!("answers: {:?}", dns_message.answers());
 
     for answer in dns_message.answers() {
         if answer.record_type() == RecordType::A {
