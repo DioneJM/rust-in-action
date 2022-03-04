@@ -20,8 +20,6 @@ fn main() {
         .parse()
         .expect("Invalid Address");
 
-    println!("dns server: {:?}", dns_server);
-
     let mut request_buffer: Vec<u8> = Vec::with_capacity(512);
     let mut response_buffer: Vec<u8> = vec![0; 512];
 
